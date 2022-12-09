@@ -38,16 +38,34 @@ func Test(ctx context.Context) error {
 	for _, plat := range platforms {
 		for _, goversion := range goversions {
 			image := fmt.Sprintf("golang:%s", goversion)
-			builder := client.Container(dagger.ContainerOpts{Platform: plat}).
+
+			local, err := strconv.ParseBool(os.Getenv("LOCAL"))
+			CheckIfError(err)
+
+			if local {
+				builder := client.Container(dagger.ContainerOpts{Platform: plat}).
+					From(image).
+					WithMountedDirectory("/src", src).
+					WithWorkdir("/src").
+					WithMountedCache("/cache", cache).
+					WithEnvVariable("GOMODCACHE", "/cache").
+					WithEnvVariable("IGNORE_DAGGER_CACHE", now).
+					WithExec([]string{"sh", "-c", "go test > /src/test.out"})
+
+				// Get Command Output
+				outputfile := fmt.Sprintf("output/%s/%s.out", string(plat), goversion)
+				testoutput = testoutput.WithFile(
+					outputfile,
+					builder.File("/src/test.out"),
+				)
+			}
+
+			output, err := client.Container(dagger.ContainerOpts{Platform: plat}).
 				From(image).
 				WithMountedDirectory("/src", src).
 				WithWorkdir("/src").
 				WithMountedCache("/cache", cache).
 				WithEnvVariable("GOMODCACHE", "/cache").
-				WithEnvVariable("IGNORE_DAGGER_CACHE", now).
-				WithExec([]string{"sh", "-c", "go test > /src/test.out"})
-
-			output, err := builder.
 				WithExec([]string{"sh", "-c", "go test"}).
 				WithEnvVariable("IGNORE_DAGGER_CACHE", now).Stdout(ctx)
 
@@ -55,16 +73,6 @@ func Test(ctx context.Context) error {
 
 			Info("Platform: %s\nGO Version: %s\n\n%s", plat, goversion, output)
 
-			local, err := strconv.ParseBool(os.Getenv("LOCAL"))
-			CheckIfError(err)
-
-			if local {
-				outputfile := fmt.Sprintf("output/%s/%s.out", string(plat), goversion)
-				testoutput = testoutput.WithFile(
-					outputfile,
-					builder.File("/src/test.out"),
-				)
-			}
 		}
 	}
 
