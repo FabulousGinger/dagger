@@ -27,6 +27,9 @@ jobs:
 
       - name: Dagger Test
         run: ./dagger test
+
+      - name: Dagger Sonar
+        run: ./dagger sonar
       
       - name: Dagger Terraform
         run: ./dagger tf apply

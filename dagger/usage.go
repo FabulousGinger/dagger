@@ -8,6 +8,7 @@ Provide a task to run
 
 options:
 test
+sonar
 ecrlogin
 deploy
 git [ hash ]

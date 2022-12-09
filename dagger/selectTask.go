@@ -22,6 +22,8 @@ func selectTask(args []string, task string) (err error) {
 		err = tasks.ECRLogin()
 	case "test":
 		err = tasks.Test(ctx)
+	case "sonar":
+		err = tasks.Scan(ctx)
 	case "push":
 		_, err = tasks.Push(ctx)
 	case "task":
