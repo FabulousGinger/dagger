@@ -31,16 +31,22 @@ func Test(ctx context.Context) error {
 
 	now := strconv.Itoa(int(time.Now().Unix()))
 
+	local, err := strconv.ParseBool(os.Getenv("LOCAL"))
+	CheckIfError(err)
+
 	// multiplatform tests
 	goversions := []string{"1.18", "1.19"}
+
+	// linux/arm64 will need to be a self hosted runner for github actions
 	platforms := []dagger.Platform{"linux/amd64"}
+
+	if local {
+		platforms = append(platforms, "linux/arm64")
+	}
 
 	for _, plat := range platforms {
 		for _, goversion := range goversions {
 			image := fmt.Sprintf("golang:%s", goversion)
-
-			local, err := strconv.ParseBool(os.Getenv("LOCAL"))
-			CheckIfError(err)
 
 			if local {
 				builder := client.Container(dagger.ContainerOpts{Platform: plat}).
