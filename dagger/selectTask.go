@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	"github.com/fabulousginger/dagger-demo/dagger/tasks"
+	"github.com/fabulousginger/dagger/dagger/tasks"
 )
 
 func selectTask(args []string, task string) (err error) {

@@ -2,10 +2,10 @@ module dagger
 
 go 1.19
 
-replace github.com/fabulousginger/dagger-demo/dagger/tasks => ./tasks
+replace github.com/fabulousginger/dagger/dagger/tasks => ./tasks
 
 require (
-	github.com/fabulousginger/dagger-demo/dagger/tasks v1.0.0
+	github.com/fabulousginger/dagger/dagger/tasks v0.0.0-00010101000000-000000000000
 	github.com/joho/godotenv v1.4.0
 )
 

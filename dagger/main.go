@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/fabulousginger/dagger-demo/dagger/tasks"
+	"github.com/fabulousginger/dagger/dagger/tasks"
 	"github.com/joho/godotenv"
 )
 
