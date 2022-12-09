@@ -1,0 +1,53 @@
+@startuml dagger
+start
+switch ( dagger )
+case ( **test** )
+  :go test;
+  stop
+case ( **sonar** )
+  :scan;
+  :upload to sonarqube;
+  stop
+case ( **ecrlogin** )
+  :login to ECR;
+  stop
+case ( **deploy** )
+  :login to ECR;
+  :build docker image;
+  :push docker image;
+  :create new task definition;
+  :update ECS service;
+  :wait unitl service is stable;
+  stop
+case ( **git** )
+  if (hash) then (yes)
+    :git-rev --short HEAD;
+  else (no)
+    :usage;
+  endif
+  stop
+case ( **task** )
+  :create new task definition;
+  stop
+case ( **service** )
+  :create new service;
+  stop
+case ( **tf** )
+  if (plan) then (yes)
+    :terraform init;
+    :terraform plan;
+  (no) elseif (apply) then (yes)
+    :terraform init;
+    :terraform apply;
+  (no) elseif (destroy) then (yes)
+    :terraform init;
+    :terraform destroy;
+  else (no)
+    :usage;
+  endif
+  stop
+case ( **other** )
+  :usage;
+  stop
+endswitch
+@enduml

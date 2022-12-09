@@ -2,6 +2,8 @@
 
 - [X] add github actions
 - [X] sonarqube
-- [ ] add diagram
+- [X] add diagram
 - [ ] add to readme
 - [ ] document code
+
+![dagger](plantuml/dagger.png)
