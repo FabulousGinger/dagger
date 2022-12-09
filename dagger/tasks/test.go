@@ -33,7 +33,7 @@ func Test(ctx context.Context) error {
 
 	// multiplatform tests
 	goversions := []string{"1.18", "1.19"}
-	platforms := []dagger.Platform{"linux/amd64", "linux/arm64"}
+	platforms := []dagger.Platform{"linux/amd64"}
 
 	for _, plat := range platforms {
 		for _, goversion := range goversions {
