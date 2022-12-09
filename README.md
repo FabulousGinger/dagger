@@ -1,8 +1,7 @@
 # TODO:
 
-* add github actions
-* sonarqube
-* add executable
-* add diagram
-* add to readme
-* document code
+- [X] add github actions
+- [X] sonarqube
+- [ ] add diagram
+- [ ] add to readme
+- [ ] document code
