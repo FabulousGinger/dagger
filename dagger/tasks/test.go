@@ -55,12 +55,16 @@ func Test(ctx context.Context) error {
 
 			Info("Platform: %s\nGO Version: %s\n\n%s", plat, goversion, output)
 
-			// Get Command Output
-			outputfile := fmt.Sprintf("output/%s/%s.out", string(plat), goversion)
-			testoutput = testoutput.WithFile(
-				outputfile,
-				builder.File("/src/test.out"),
-			)
+			local, err := strconv.ParseBool(os.Getenv("LOCAL"))
+			CheckIfError(err)
+
+			if local {
+				outputfile := fmt.Sprintf("output/%s/%s.out", string(plat), goversion)
+				testoutput = testoutput.WithFile(
+					outputfile,
+					builder.File("/src/test.out"),
+				)
+			}
 		}
 	}
 
