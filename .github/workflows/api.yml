@@ -1,0 +1,22 @@
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+
+name: API Deployment
+
+jobs:
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dagger
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: where am i?
+        run: pwd
