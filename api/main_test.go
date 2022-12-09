@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/enescakir/emoji"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestGreeting(t *testing.T) {
 	g := greeting()
-	should := fmt.Sprintf("%v %v", emoji.WavingHand, emoji.WorldMap)
+	should := fmt.Sprintf("%c %c", wavingHand, worldMap)
 
 	assert.Equal(t, should, g)
 }

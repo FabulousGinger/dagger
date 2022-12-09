@@ -6,8 +6,12 @@ import (
 	"io"
 	"net/http"
 	"os"
+)
 
-	"github.com/enescakir/emoji"
+const (
+	wavingHand  = '\U0001f44b'
+	worldMap    = '\U0001f5fa'
+	YellowHeart = '\U0001f49b'
 )
 
 func main() {
@@ -26,6 +30,7 @@ func main() {
 }
 
 func greeting() string {
-	return fmt.Sprintf("%v %v", emoji.WavingHand, emoji.WorldMap)
-	// return fmt.Sprintf("%v", emoji.YellowHeart)
+
+	return fmt.Sprintf("%c %c", wavingHand, worldMap)
+	// return fmt.Sprintf("%c", YellowHeart)
 }
