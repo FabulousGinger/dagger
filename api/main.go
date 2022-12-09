@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/http"
 	"os"
+
+	"github.com/enescakir/emoji"
 )
 
 func main() {
@@ -24,5 +26,6 @@ func main() {
 }
 
 func greeting() string {
-	return "Hello"
+	return fmt.Sprintf("%v %v", emoji.WavingHand, emoji.WorldMap)
+	// return fmt.Sprintf("%v", emoji.YellowHeart)
 }

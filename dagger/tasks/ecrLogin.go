@@ -21,9 +21,13 @@ func ECRLogin() (err error) {
 
 	input := &ecr.GetAuthorizationTokenInput{}
 	resp, err := svc.GetAuthorizationToken(input)
+	CheckIfError(err)
+
 	auth := resp.AuthorizationData
 
 	decode, err := base64.StdEncoding.DecodeString(*auth[0].AuthorizationToken)
+	CheckIfError(err)
+
 	token := strings.SplitN(string(decode), ":", 2)
 	user := token[0]
 	password := token[1]

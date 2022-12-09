@@ -9,7 +9,7 @@ import (
 	"dagger.io/dagger"
 )
 
-func Tf(ctx context.Context, subtask string) error {
+func Tf(ctx context.Context, subtask string) (err error) {
 	var tfcommand []string
 
 	switch subtask {
@@ -23,9 +23,7 @@ func Tf(ctx context.Context, subtask string) error {
 
 	// Create client
 	client, err := dagger.Connect(ctx, dagger.WithLogOutput(os.Stdout))
-	if err != nil {
-		return err
-	}
+	CheckIfError(err)
 	defer client.Close()
 
 	now := strconv.Itoa(int(time.Now().Unix()))
@@ -34,20 +32,21 @@ func Tf(ctx context.Context, subtask string) error {
 	tfdirectory := client.Host().Directory(os.Getenv("TERRAFORM_DIRECTORY"))
 
 	// Load terraform image, init, and run
-	tf := client.Container().
+	tf, err := client.Container().
 		From("hashicorp/terraform:"+os.Getenv("TERRAFORM_VERSION")).
 		WithMountedDirectory("/terraform", tfdirectory).
 		WithWorkdir(os.Getenv("TERRAFORM_WORK_DIR")).
 		WithEnvVariable("AWS_ACCESS_KEY_ID", os.Getenv("AWS_ACCESS_KEY_ID")).
 		WithEnvVariable("AWS_SECRET_ACCESS_KEY", os.Getenv("AWS_SECRET_ACCESS_KEY")).
 		WithEnvVariable("AWS_DEFAULT_REGION", os.Getenv("AWS_DEFAULT_REGION")).
-		WithEnvVariable("CACHEBUSTER", now).
+		WithEnvVariable("IGNORE_DAGGER_CACHE", now).
 		WithExec([]string{"init"}).
-		WithExec(tfcommand)
+		WithExec(tfcommand).Stdout(ctx)
 
-	// Execute against dagger engine
-	_, err = tf.ExitCode(ctx)
+	CheckIfError(err)
 
-	return err
+	Info(tf)
+
+	return
 
 }

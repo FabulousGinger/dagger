@@ -44,11 +44,13 @@ func Test(ctx context.Context) error {
 				WithWorkdir("/src").
 				WithMountedCache("/cache", cache).
 				WithEnvVariable("GOMODCACHE", "/cache").
-				WithEnvVariable("CACHEBUSTER", now).
-				WithExec([]string{"sh", "-c", "go test"}).
+				WithEnvVariable("IGNORE_DAGGER_CACHE", now).
 				WithExec([]string{"sh", "-c", "go test > /src/test.out"})
 
-			output, err := builder.Stdout(ctx)
+			output, err := builder.
+				WithExec([]string{"sh", "-c", "go test"}).
+				WithEnvVariable("IGNORE_DAGGER_CACHE", now).Stdout(ctx)
+
 			CheckIfError(err)
 
 			Info("Platform: %s\nGO Version: %s\n\n%s", plat, goversion, output)

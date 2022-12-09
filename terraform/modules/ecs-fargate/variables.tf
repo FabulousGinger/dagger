@@ -69,7 +69,7 @@ variable "zone_id" {
 variable "deregistration_delay" {
   description = "he amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from draining to unused."
   type        = number
-  default     = 300
+  default     = 5
 }
 
 variable "tg_health_check_path" {

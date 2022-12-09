@@ -8,6 +8,7 @@ Provide a task to run
 
 options:
 test
+ecrlogin
 deploy
 git [ hash ]
 task [ name ]

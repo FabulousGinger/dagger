@@ -13,25 +13,24 @@ import (
 
 func ECSDeploy(ctx context.Context) (err error) {
 
-	awsRepository := os.Getenv("AWS_REPOSITORY")
 	awsRegion := os.Getenv("AWS_DEFAULT_REGION")
+	taskDefinitionName := os.Getenv("TASK_DEFINITION_NAME")
+	clusterName := os.Getenv("CLUSTER_NAME")
+	serviceName := os.Getenv("ECS_SERVICE_NAME")
 
-	Info("Pushing Docker image to AWS ECR: %s", awsRepository)
 	_, err = Push(ctx)
 	CheckIfError(err)
 
-	// Create ECS task deployment
-	svc := ecs.New(session.New(&aws.Config{
-		Region: aws.String(awsRegion),
-	}))
+	sess := session.Must(session.NewSession())
 
-	Info("Updating Task Definition")
-	taskDefinition, err := ECSFargateTask("dagger")
+	svc := ecs.New(sess, aws.NewConfig().WithRegion(awsRegion))
+
+	taskDefinition, err := ECSFargateTask(taskDefinitionName)
 	CheckIfError(err)
 
 	input := &ecs.UpdateServiceInput{
-		Service:            aws.String("dagger"),
-		Cluster:            aws.String("dagger"),
+		Service:            aws.String(serviceName),
+		Cluster:            aws.String(clusterName),
 		TaskDefinition:     aws.String(taskDefinition),
 		ForceNewDeployment: aws.Bool(true),
 	}
@@ -42,9 +41,9 @@ func ECSDeploy(ctx context.Context) (err error) {
 
 	Info("Waiting for Service to be stable")
 	err = svc.WaitUntilServicesStable(&ecs.DescribeServicesInput{
-		Cluster: aws.String("dagger"),
+		Cluster: aws.String(clusterName),
 		Services: []*string{
-			aws.String("dagger"),
+			aws.String(serviceName),
 		},
 	})
 	CheckIfError(err)
@@ -75,10 +74,9 @@ func ECSFargateService(name string) (err error) {
 	count, err := strconv.Atoi(os.Getenv("ECS_SERVICE_COUNT"))
 	CheckIfError(err)
 
-	// Create ECS task deployment
-	svc := ecs.New(session.New(&aws.Config{
-		Region: aws.String(awsRegion),
-	}))
+	sess := session.Must(session.NewSession())
+
+	svc := ecs.New(sess, aws.NewConfig().WithRegion(awsRegion))
 
 	input := &ecs.CreateServiceInput{
 		Cluster:      aws.String(clusterName),
@@ -106,15 +104,6 @@ func ECSFargateService(name string) (err error) {
 
 	Info("Result: %s", result)
 
-	// SecurityGroups: []*string{
-	// 	aws.String("sg-08c51a0eef7ae3bed"),
-	// },
-	// Subnets: []*string{
-	// 	aws.String("subnet-02f6bff51ef63ce8e"),
-	// 	aws.String("subnet-0e035a2dafb7d60af"),
-	// 	aws.String("subnet-055bbaa2552864e9c"),
-	// },
-
 	return
 }
 
@@ -128,9 +117,9 @@ func ECSFargateTask(name string) (taskDefinition string, err error) {
 	containerPort, err := strconv.Atoi(os.Getenv("CONTAINER_PORT"))
 	CheckIfError(err)
 
-	svc := ecs.New(session.New(&aws.Config{
-		Region: aws.String(awsRegion),
-	}))
+	sess := session.Must(session.NewSession())
+
+	svc := ecs.New(sess, aws.NewConfig().WithRegion(awsRegion))
 
 	ctx := context.Background()
 
