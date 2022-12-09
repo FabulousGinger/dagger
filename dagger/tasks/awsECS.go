@@ -18,6 +18,9 @@ func ECSDeploy(ctx context.Context) (err error) {
 	clusterName := os.Getenv("CLUSTER_NAME")
 	serviceName := os.Getenv("ECS_SERVICE_NAME")
 
+	err = ECRLogin()
+	CheckIfError(err)
+
 	_, err = Push(ctx)
 	CheckIfError(err)
 

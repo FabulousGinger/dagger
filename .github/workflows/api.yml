@@ -18,5 +18,14 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      - name: where am i?
-        run: pwd
+      - name: Go Build Dagger
+        run: go build
+
+      - name: Dagger Test
+        run: ./dagger test
+      
+      - name: Dagger Terraform
+        run: ./dagger tf apply
+        
+      - name: Dagger Deploy API
+        run: ./dagger deploy
