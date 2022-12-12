@@ -38,5 +38,13 @@ These are the tasks currently used in this demo:
 * [service](dagger/tasks/awsECS.go): Service creates a new service, it will not update the service, that is what `deploy` is for. Think of this as an init command.
 * [terraform](dagger/tasks/terraform.go): Runs a Terraform container using Dagger. The options here are for the Terraform commands, plan, apply, and destroy.
 
+## GitHub Actions
+This repo also has GitHub Actions to use the Dagger CI Tool. The [workflow file](.github/workflows/api.yml) is a good example on how simple the steps are.
+
+* git checkout
+* create .env file from secret
+* go build
+* dagger pipeline
+
 ## Demo URL
 [hello world](https://dagger.fuzzplay.io/)
