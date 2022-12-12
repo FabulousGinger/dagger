@@ -9,16 +9,16 @@ import (
 	"dagger.io/dagger"
 )
 
-func Tf(ctx context.Context, subtask string) (err error) {
-	var tfcommand []string
+func Terraform(ctx context.Context, subtask string) (err error) {
+	var terraformCommand []string
 
 	switch subtask {
 	case "plan":
-		tfcommand = []string{"plan"}
+		terraformCommand = []string{"plan"}
 	case "apply":
-		tfcommand = []string{"apply", "-auto-approve"}
+		terraformCommand = []string{"apply", "-auto-approve"}
 	case "destroy":
-		tfcommand = []string{"apply", "-destroy", "-auto-approve"}
+		terraformCommand = []string{"apply", "-destroy", "-auto-approve"}
 	}
 
 	// Create client
@@ -29,23 +29,23 @@ func Tf(ctx context.Context, subtask string) (err error) {
 	now := strconv.Itoa(int(time.Now().Unix()))
 
 	// Load terraform directory
-	tfdirectory := client.Host().Directory(os.Getenv("TERRAFORM_DIRECTORY"))
+	terraformDirectory := client.Host().Directory(os.Getenv("TERRAFORM_DIRECTORY"))
 
 	// Load terraform image, init, and run
-	tf, err := client.Container().
+	terraform, err := client.Container().
 		From("hashicorp/terraform:"+os.Getenv("TERRAFORM_VERSION")).
-		WithMountedDirectory("/terraform", tfdirectory).
+		WithMountedDirectory("/terraform", terraformDirectory).
 		WithWorkdir(os.Getenv("TERRAFORM_WORK_DIR")).
 		WithEnvVariable("AWS_ACCESS_KEY_ID", os.Getenv("AWS_ACCESS_KEY_ID")).
 		WithEnvVariable("AWS_SECRET_ACCESS_KEY", os.Getenv("AWS_SECRET_ACCESS_KEY")).
 		WithEnvVariable("AWS_DEFAULT_REGION", os.Getenv("AWS_DEFAULT_REGION")).
 		WithEnvVariable("IGNORE_DAGGER_CACHE", now).
 		WithExec([]string{"init"}).
-		WithExec(tfcommand).Stdout(ctx)
+		WithExec(terraformCommand).Stdout(ctx)
 
 	CheckIfError(err)
 
-	Info(tf)
+	Info(terraform)
 
 	return
 

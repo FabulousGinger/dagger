@@ -41,13 +41,15 @@ func selectTask(args []string, task string) (err error) {
 		tasks.CheckIfError(err)
 	case "deploy":
 		err = tasks.ECSDeploy(ctx)
-	case "tf":
+	case "pipeline":
+		err = tasks.Pipeline(ctx)
+	case "terraform":
 		if len(args) < 2 {
-			tasks.Info(tfUsage)
+			tasks.Info(terraformUsage)
 			return
 		}
 		subtask := args[1]
-		err = tasks.Tf(ctx, subtask)
+		err = tasks.Terraform(ctx, subtask)
 	default:
 		tasks.Info("Unknown task: %s", task)
 		return

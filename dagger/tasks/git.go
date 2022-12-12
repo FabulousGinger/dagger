@@ -14,7 +14,7 @@ func GitHash() (shortHash string, err error) {
 	user := os.Getenv("GIT_USER")
 	token := os.Getenv("GIT_TOKEN")
 
-	// Info("git clone " + repository)
+	Info("git clone " + repository)
 	// Clones the given repository, creating the remote, the local branches
 	// and fetching the objects, everything in memory:
 	r, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{
@@ -26,7 +26,7 @@ func GitHash() (shortHash string, err error) {
 	})
 	CheckIfError(err)
 
-	// Info("git rev-parse --short HEAD")
+	Info("git rev-parse --short HEAD")
 	// ... retrieves the branch pointed by HEAD
 	ref, err := r.Head()
 	CheckIfError(err)

@@ -19,6 +19,12 @@ case ( **deploy** )
   :update ECS service;
   :wait unitl service is stable;
   stop
+case ( **pipeline** )
+  :test;
+  :sonar;
+  :terraform apply;
+  :deploy;
+  stop
 case ( **git** )
   if (hash) then (yes)
     :git-rev --short HEAD;
@@ -32,7 +38,7 @@ case ( **task** )
 case ( **service** )
   :create new service;
   stop
-case ( **tf** )
+case ( **terraform** )
   if (plan) then (yes)
     :terraform init;
     :terraform plan;

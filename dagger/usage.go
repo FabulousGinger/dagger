@@ -7,21 +7,22 @@ Dagger CI Tool
 Provide a task to run
 
 options:
-test
-sonar
-ecrlogin
-deploy
-git [ hash ]
-task [ name ]
-service [ name ]
-tf [ plan | apply | destroy ]
+test					Run go test
+sonar					Scan with SonarQube and upload to project
+ecrlogin				Login to AWS ECR
+deploy					Will run everything needed to Deploy to AWS ECS
+pipeline				Will run test, terraform apply, build, and deploy 
+git [ hash ] 				Git short hash, git rev-parse HEAD
+task [ name ]				Create/update task definition on AWS ECS
+service [ name ]			Create service on AWS ECS
+terraform [ plan | apply | destroy ]	Run Terraform commands
 `
-	tfUsage = `
+	terraformUsage = `
 Dagger CI Tool
 
 Provide a subtask for Terraform [ plan | apply | destroy ]
 
-dagger [tf plan | tf apply | tf destroy ]
+dagger [terraform plan | terraform apply | terraform destroy ]
 `
 	gitUsage = `
 Dagger CI Tool
