@@ -25,14 +25,5 @@ jobs:
       - name: Go Build Dagger
         run: go build
 
-      - name: Dagger Test
-        run: ./dagger test
-
-      - name: Dagger Sonar
-        run: ./dagger sonar
-      
-      - name: Dagger Terraform
-        run: ./dagger tf apply
-
-      - name: Dagger Deploy API
-        run: ./dagger deploy
+      - name: Dagger Pipeline
+        run: ./dagger pipeline
