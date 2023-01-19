@@ -1,4 +1,6 @@
 FROM --platform=linux/amd64 golang:1.19-alpine
+	# checkov:skip=CKV_DOCKER_3: this is just a demo
+	# checkov:skip=CKV_DOCKER_2: this is just a demo
 
 WORKDIR /app
 
