@@ -9,7 +9,7 @@ import (
 
 func TestGreeting(t *testing.T) {
 	g := greeting()
-	should := fmt.Sprintf("%c %c", wavingHand, worldMap)
+	should := fmt.Sprintf("%c", YellowHeart)
 
 	assert.Equal(t, should, g)
 }
