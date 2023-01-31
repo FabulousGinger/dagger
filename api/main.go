@@ -31,6 +31,6 @@ func main() {
 
 func greeting() string {
 
-	// return fmt.Sprintf("%c %c", wavingHand, worldMap)
-	return fmt.Sprintf("%c", YellowHeart)
+	return fmt.Sprintf("%c %c", wavingHand, worldMap)
+	// return fmt.Sprintf("%c", YellowHeart)
 }
